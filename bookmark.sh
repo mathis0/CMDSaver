@@ -23,7 +23,7 @@ save_last_commands() {
     # Special handling for saving just the last command
     if [ "$num_commands" -eq 1 ]; then
         # Fetch the last command excluding this script and the command triggering this script
-        history | tail -n 1 | head -n 2 | sed 's/^[ ]*[0-9]*[ ]*//' >> ~/commands.txt
+        history | tail -n 2 | head -n 1 | sed 's/^[ ]*[0-9]*[ ]*//' >> ~/commands.txt
     else
         # Append the last X commands to the file, adjusting for script invocation
         history | tail -n $((num_commands + 1)) | head -n $num_commands | sed 's/^[ ]*[0-9]*[ ]*//' >> ~/commands.txt
