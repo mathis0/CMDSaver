@@ -1,6 +1,7 @@
 #!/bin/bash
 # created by Mathis - 8 Feb 2024 
-
+#
+#
 
 save_last_commands() {
     local num_commands=$1
@@ -15,10 +16,18 @@ save_last_commands() {
     # If a comment is provided, append it to the file
     if [[ -n "$comment" ]]; then
         echo -e "\n# $comment" >> ~/commands.txt
+    else 
+        echo -e "\n" >> ~/commands.txt
     fi
 
-    # Append the last X commands to the file, skipping the call to this script
-    history | tail -n $((num_commands + 1)) | head -n $num_commands | sed 's/^[ ]*[0-9]*[ ]*//' >> ~/commands.txt
+    # Special handling for saving just the last command
+    if [ "$num_commands" -eq 1 ]; then
+        # Fetch the last command excluding this script and the command triggering this script
+        history | tail -n 1 | head -n 1 | sed 's/^[ ]*[0-9]*[ ]*//' >> ~/commands.txt
+    else
+        # Append the last X commands to the file, adjusting for script invocation
+        history | tail -n $((num_commands + 1)) | head -n $num_commands | sed 's/^[ ]*[0-9]*[ ]*//' >> ~/commands.txt
+    fi
 }
 
 # Main function to parse arguments and call save_last_commands
